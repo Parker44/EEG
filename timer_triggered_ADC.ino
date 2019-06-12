@@ -86,13 +86,14 @@ void loop () {
 //  Serial.println();
 
 
-  int sum = (int) (fht_log_out[8] + fht_log_out[9] + fht_log_out[10] + fht_log_out[11] + fht_log_out[12]);
-  float avg = (float) sum / 5;
-  Serial.println(avg);
+  //int sum = (int) (fht_log_out[8] + fht_log_out[9] + fht_log_out[10] + fht_log_out[11] + fht_log_out[12]);
+  //float avg = (float) sum / 5;
+  //Serial.println(findMax(fht_log_out, 8, 12));
   // Determine the dominant alpha frequency
-//  int maxVal = (int) fht_log_out[findMax(fht_log_out, 8, 12)];
-//  Serial.println(maxVal);
+  int maxVal = (int) fht_log_out[findMax(fht_log_out, 8, 12)];
+  int avg = (int) average(fht_log_out, 8, 12);
   setLED(avg); 
+  //Serial.println(avg);
 
   // reset count and ADC, enable interrupts
   sampleCount = 0;
@@ -103,7 +104,7 @@ void loop () {
 /*
  * Average a range of frequencies
  */
-float average (uint8_t vals[], lower, upper) {
+float average (uint8_t vals[], int lower, int upper) {
   float average = 0;
   for (int i = lower; i <= upper; i++) {
     average += (float) vals[i];
@@ -122,10 +123,12 @@ int findMax (uint8_t vals[], int lower, int upper) {
 }
 
 void setLED (int val) {
-  float binMin = 110;
-  float binMax = 210;
-  float percentage = (val - binMin) / (binMax - binMin);
-  float brightness = percentage * 255;
+  double binMin = pow(80, 4);
+  double binMax = pow(155, 4);
+  double percentage = (pow(val, 4) - binMin) / (binMax - binMin);
+  double brightness = percentage * 255;
+  if (brightness < 0)
+    brightness = 0;
   analogWrite(ledPin, (int) brightness);
-  //Serial.println((int) brightness);
+  Serial.println((int) brightness);
 }
