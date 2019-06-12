@@ -85,12 +85,7 @@ void loop () {
 //  Serial.print(fht_log_out[12], DEC);
 //  Serial.println();
 
-
-  //int sum = (int) (fht_log_out[8] + fht_log_out[9] + fht_log_out[10] + fht_log_out[11] + fht_log_out[12]);
-  //float avg = (float) sum / 5;
-  //Serial.println(findMax(fht_log_out, 8, 12));
-  // Determine the dominant alpha frequency
-  int maxVal = (int) fht_log_out[findMax(fht_log_out, 8, 12)];
+  // average weights of alpha frequencies
   int avg = (int) average(fht_log_out, 8, 12);
   setLED(avg); 
   //Serial.println(avg);
