@@ -13,11 +13,11 @@
 
 #define LOG_OUT 1 // use the log output function
 #define FHT_N 256 // set to 256 point fht (input buffer size)
+#define LED_PIN 11
+#define ADC_PIN 0
 
 #include <FHT.h> // include the library
-const int ledPin = 11;
-const byte adcPin = 0;  // A0
-volatile int sampleCount;  // current number of samples in buffer
+volatile int sampleCount = 0;  // current number of samples in buffer
 
 
 // ADC complete ISR
@@ -124,6 +124,6 @@ void setLED (int val) {
   double brightness = percentage * 255;
   if (brightness < 0)
     brightness = 0;
-  analogWrite(ledPin, (int) brightness);
+  analogWrite(LED_PIN, (int) brightness);
   Serial.println((int) brightness);
 }
