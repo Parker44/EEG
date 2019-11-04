@@ -16,7 +16,7 @@
 #define LED_PIN 11
 #define ADC_PIN 0
 
-#include <FHT.h> // include the library
+#include <FHT.h> // include the Fast Hartley Transform library
 volatile int sampleCount = 0;  // current number of samples in buffer
 
 
