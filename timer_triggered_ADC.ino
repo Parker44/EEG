@@ -14,7 +14,7 @@
 #define LOG_OUT 1 // use the log output function
 #define FHT_N 256 // set to 256 point fht (input buffer size)
 #define LED_PIN 11
-#define ADC_PIN 0
+#define ADC_PIN A0
 
 #include <FHT.h> // include the Fast Hartley Transform library
 volatile int sampleCount = 0;  // current number of samples in buffer
