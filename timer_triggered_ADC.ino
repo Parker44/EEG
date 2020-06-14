@@ -19,7 +19,6 @@
 #include <FHT.h> // include the Fast Hartley Transform library
 volatile int sampleCount = 0;  // current number of samples in buffer
 
-
 // ADC complete ISR
 ISR (ADC_vect){
   if (sampleCount < FHT_N) {
@@ -70,25 +69,9 @@ void loop () {
   fht_run(); // process the data in the fht
   fht_mag_log(); // take the output of the fht
 
-  // Send data to serial to be read by Processing script (FHT_128_channel_analyser)
-//  Serial.write(255); // send a start byte
-//  Serial.write(fht_log_out, FHT_N/2); // send out the data
-
-//  Serial.print(fht_log_out[8], DEC);
-//  Serial.print(" ");
-//  Serial.print(fht_log_out[9], DEC);
-//  Serial.print(" ");
-//  Serial.print(fht_log_out[10], DEC);
-//  Serial.print(" ");
-//  Serial.print(fht_log_out[11], DEC);
-//  Serial.print(" ");
-//  Serial.print(fht_log_out[12], DEC);
-//  Serial.println();
-
   // average weights of alpha frequencies
   int avg = (int) average(fht_log_out, 8, 12);
   setLED(avg); 
-  //Serial.println(avg);
 
   // reset count and ADC, enable interrupts
   sampleCount = 0;
@@ -96,9 +79,6 @@ void loop () {
   ADCSRA = 0xEC;
 }
 
-/*
- * Average a range of frequencies
- */
 float average (uint8_t vals[], int lower, int upper) {
   float average = 0;
   for (int i = lower; i <= upper; i++) {
