@@ -73,7 +73,7 @@ void loop () {
   fht_run(); // Process the data in the fht
   fht_mag_log(); // Take the output of the fht
 
-  // Send data to serial to be saved in file by PuTTY terminal
+  // Send data to serial to be saved in log file by PuTTY terminal
   Serial.print(fht_log_out[8], DEC);
   Serial.print("\t");
   Serial.print(fht_log_out[9], DEC);
