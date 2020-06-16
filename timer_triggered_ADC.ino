@@ -50,7 +50,7 @@ void setup () {
   TIMSK1 |= (1 << OCIE1B);  // enable timer compare interrupt
 
   // initialize ADC
-  ADCSRA  = bit (ADEN)  | bit (ADIE) | bit (ADIF);  //enable ADC, enable interrupts, set interrupt flag
+  ADCSRA  = bit (ADEN)  | bit (ADIE) | bit (ADIF);  // enable ADC, enable interrupts, set interrupt flag
   ADCSRA |= bit (ADPS2) | bit (ADPS1);              // prescaler of 64
   ADMUX   = bit (REFS0);                            // set reference voltage of 5V
   ADCSRB  = bit (ADTS2) | bit (ADTS0);              // Timer/Counter1 Compare Match B
