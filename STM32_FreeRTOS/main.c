@@ -256,14 +256,14 @@ static void DMA_Configuration(void)
 
 static void Enable_Peripherals(void)
 {
-    TIM_Cmd(TIM2, ENABLE);
-    GPIO_WriteBit(GPIOA, GPIO_Pin_5, Bit_SET);
-    USART_Cmd(USART2,ENABLE);
-    TIM_Cmd(TIM2, ENABLE);
-    DMA_Cmd(DMA2_Stream0, ENABLE);
-    ADC_DMARequestAfterLastTransferCmd(ADC1, ENABLE);
-    ADC_DMACmd(ADC1, ENABLE);
-    ADC_Cmd(ADC1, ENABLE);
+    	TIM_Cmd(TIM2, ENABLE);
+    	GPIO_WriteBit(GPIOA, GPIO_Pin_5, Bit_SET);
+    	USART_Cmd(USART2,ENABLE);
+    	TIM_Cmd(TIM2, ENABLE);
+    	DMA_Cmd(DMA2_Stream0, ENABLE);
+    	ADC_DMARequestAfterLastTransferCmd(ADC1, ENABLE);
+    	ADC_DMACmd(ADC1, ENABLE);
+    	ADC_Cmd(ADC1, ENABLE);
 }
 
 static void prvSetupHardware(void)
