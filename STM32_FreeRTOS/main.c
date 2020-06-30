@@ -60,11 +60,10 @@ int main(void)
 
 	DWT->CTRL |= (1 << 0);
 
-	//1.  Reset the RCC clock configuration to the default reset state.
+	//Reset the RCC clock configuration to the default reset state.
 	//HSI ON, PLL OFF, HSE OFF, system clock = 16MHz, cpu_clock = 16MHz
 	RCC_DeInit();
 
-	//2. update the SystemCoreClock variable
 	SystemCoreClockUpdate();
 
 	prvSetupHardware();
@@ -150,17 +149,17 @@ static void GPIO_Configuration(void)
 	GPIO_Init(GPIOA, &GPIOA_RXTX_InitStructure);
 
 	//AF mode settings for the pins
-    GPIO_PinAFConfig(GPIOA,GPIO_PinSource2,GPIO_AF_USART2); //PA2
+        GPIO_PinAFConfig(GPIOA,GPIO_PinSource2,GPIO_AF_USART2); //PA2
 	GPIO_PinAFConfig(GPIOA,GPIO_PinSource3,GPIO_AF_USART2); //PA3
 }
 
 static void EXTI_Config(void)
 {
 	//Interrupt configuration for the button (PC13)
-	//1. System configuration for EXTI line
+	//System configuration for EXTI line
 	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource13);
 
-	//2. EXTI line configuration 13, falling edge, interrupt mode
+	//EXTI line configuration 13, falling edge, interrupt mode
 	EXTI_InitTypeDef exti_init;
 	exti_init.EXTI_Line = EXTI_Line13;
 	exti_init.EXTI_Mode = EXTI_Mode_Interrupt;
@@ -171,7 +170,6 @@ static void EXTI_Config(void)
 
 static void NVIC_Configuration(void)
 {
-	//3. NVIC settings (IRQ settings for the selected EXTI line 13)
 	NVIC_SetPriority(EXTI15_10_IRQn, 5);
 	NVIC_EnableIRQ(EXTI15_10_IRQn);
 
@@ -201,15 +199,13 @@ static void UART_Config(void)
 static void TIM2_Configuration(void)
 {
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	/* Time base configuration */
 	TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
-	TIM_TimeBaseStructure.TIM_Period = (16000000/1000) - 1; //HCLK: 16MHz
+	TIM_TimeBaseStructure.TIM_Period = (16000000/1000) - 1; //HCLK: 16MHz, TIM2_IT: 1kHz
 	TIM_TimeBaseStructure.TIM_Prescaler = 0;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
-	/* TIM2 TRGO selection */
-
+	// TIM2 TRGO selection
 	TIM_SelectOutputTrigger(TIM2, TIM_TRGOSource_Update); // ADC_ExternalTrigConv_T2_TRGO
 }
 
@@ -217,7 +213,6 @@ static void ADC_Configuration(void)
 {
 	ADC_CommonInitTypeDef ADC_CommonInitStructure;
 	ADC_InitTypeDef ADC_InitStructure;
-	/* ADC Common Init */
 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
 	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
 	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
@@ -231,7 +226,7 @@ static void ADC_Configuration(void)
 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
 	ADC_InitStructure.ADC_NbrOfConversion = 1;
 	ADC_Init(ADC1, &ADC_InitStructure);
-	/* ADC1 regular channel 11 configuration */
+	// ADC1 regular channel 11 configuration
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_11, 1, ADC_SampleTime_15Cycles); // PC1
 }
 
@@ -242,9 +237,9 @@ static void DMA_Configuration(void)
 	DMA2_STR0_CH0_InitStructure.DMA_Memory0BaseAddr = (uint32_t)&ADCConvertedValues;
 	DMA2_STR0_CH0_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&ADC1->DR;
 	DMA2_STR0_CH0_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
-	DMA2_STR0_CH0_InitStructure.DMA_BufferSize = BUFFERSIZE; // Count of 16-bit words
+	DMA2_STR0_CH0_InitStructure.DMA_BufferSize = BUFFERSIZE;
 	DMA2_STR0_CH0_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
-	DMA2_STR0_CH0_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;		// increment pointer
+	DMA2_STR0_CH0_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
 	DMA2_STR0_CH0_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
 	DMA2_STR0_CH0_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
 	DMA2_STR0_CH0_InitStructure.DMA_Mode = DMA_Mode_Circular;
@@ -254,7 +249,7 @@ static void DMA_Configuration(void)
 	DMA2_STR0_CH0_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
 	DMA2_STR0_CH0_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
 	DMA_Init(DMA2_Stream0, &DMA2_STR0_CH0_InitStructure);
-	/* Enable DMA Stream Half / Transfer Complete interrupt */
+	// Enable DMA Stream Half / Transfer Complete interrupt
 	DMA_ITConfig(DMA2_Stream0, DMA_IT_TC | DMA_IT_HT, ENABLE);
 
 }
@@ -263,17 +258,11 @@ static void Enable_Peripherals(void)
 {
     TIM_Cmd(TIM2, ENABLE);
     GPIO_WriteBit(GPIOA, GPIO_Pin_5, Bit_SET);
-	//Enable the UART2 peripheral
-	USART_Cmd(USART2,ENABLE);
-    /* TIM2 enable counter */
+    USART_Cmd(USART2,ENABLE);
     TIM_Cmd(TIM2, ENABLE);
-    /* DMA2_Stream0 enable */
     DMA_Cmd(DMA2_Stream0, ENABLE);
-    /* Enable DMA request after last transfer (Single-ADC mode) */
     ADC_DMARequestAfterLastTransferCmd(ADC1, ENABLE);
-    /* Enable ADC1 DMA */
     ADC_DMACmd(ADC1, ENABLE);
-    /* Enable ADC1 */
     ADC_Cmd(ADC1, ENABLE);
 }
 
@@ -325,9 +314,6 @@ void DMA2_Stream0_IRQHandler(void) // Called at 1 KHz for 200 KHz sample rate, L
 		printdata(&ADCConvertedValues[BUFFERSIZE/2]);
 	}
 
-	// if the above freertos apis wake up any higher priority task, then yield the processor to the
-	//higher priority task which is just woken up.
-
 //	if(xHigherPriorityTaskWoken)
 //	{
 //		taskYIELD();
@@ -339,7 +325,7 @@ void DMA2_Stream0_IRQHandler(void) // Called at 1 KHz for 200 KHz sample rate, L
 void EXTI15_10_IRQHandler(void)
 {
 	traceISR_ENTER();
-	//1. Clear the interrupt pending bit of the EXTI line (13)
+	// Clear the interrupt pending bit of the EXTI line (13)
 	EXTI_ClearITPendingBit(EXTI_Line13);
 	buttonHandler();
 	traceISR_EXIT();
