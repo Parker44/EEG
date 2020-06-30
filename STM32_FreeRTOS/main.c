@@ -292,22 +292,19 @@ void printdata(volatile uint16_t *data)
 
 void DMA2_Stream0_IRQHandler(void) // Called at 1 KHz for 200 KHz sample rate, LED Toggles at 500 Hz
 {
-	traceISR_ENTER();
+	traceISR_ENTER(); // for SEGGER
 
 //	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
-	/* Test on DMA Stream Half Transfer interrupt */
 	if(DMA_GetITStatus(DMA2_Stream0, DMA_IT_HTIF0))
 	{
-		/* Clear DMA Stream Half Transfer interrupt pending bit */
 		DMA_ClearITPendingBit(DMA2_Stream0, DMA_IT_HTIF0);
 //		xTaskNotifyFromISR(xTaskHandle1,0,eNoAction,&xHigherPriorityTaskWoken);
 		printdata(&ADCConvertedValues[0]);
 	}
-	/* Test on DMA Stream Transfer Complete interrupt */
+	
 	if(DMA_GetITStatus(DMA2_Stream0, DMA_IT_TCIF0))
 	{
-		/* Clear DMA Stream Transfer Complete interrupt pending bit */
 		DMA_ClearITPendingBit(DMA2_Stream0, DMA_IT_TCIF0);
 
 //		xTaskNotifyFromISR(xTaskHandle1,0,eNoAction,&xHigherPriorityTaskWoken);
@@ -324,7 +321,7 @@ void DMA2_Stream0_IRQHandler(void) // Called at 1 KHz for 200 KHz sample rate, L
 
 void EXTI15_10_IRQHandler(void)
 {
-	traceISR_ENTER();
+	traceISR_ENTER(); // for SEGGER
 	// Clear the interrupt pending bit of the EXTI line (13)
 	EXTI_ClearITPendingBit(EXTI_Line13);
 	buttonHandler();
