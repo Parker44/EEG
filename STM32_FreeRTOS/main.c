@@ -280,10 +280,12 @@ static void prvSetupHardware(void)
 
 void printdata(volatile uint16_t *data)
 {
-	for(uint32_t i=0; i < BUFFERSIZE/2; i++)
+	for(uint16_t i=0; i < BUFFERSIZE/2; i++)
 	{
 		while ( USART_GetFlagStatus(USART2,USART_FLAG_TXE) != SET);
-		USART_SendData(USART2, data[i]);
+		USART_SendData(USART2, data[i] >> 8);		//high byte
+		while ( USART_GetFlagStatus(USART2,USART_FLAG_TXE) != SET);
+		USART_SendData(USART2, data[i] & 0xFF);		//low byte
 	}
 
 	while ( USART_GetFlagStatus(USART2,USART_FLAG_TC) != SET);
