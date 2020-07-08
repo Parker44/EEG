@@ -78,16 +78,6 @@ int main(void)
 	for(;;);
 }
 
-//void vTask1_UART_Write(int start, int end)
-//{
-//	uint16_t *pData = NULL;
-//	while(1)
-//	{
-//		xQueueReceive(UART_WriteQueue,&pData,portMAX_DELAY);
-//		printdata(pData);
-//	}
-//}
-
 void buttonHandler(void)
 {
 	if(!button_status_flag)
@@ -296,27 +286,17 @@ void DMA2_Stream0_IRQHandler(void) // Called at 1 KHz for 200 KHz sample rate, L
 {
 	traceISR_ENTER(); // for SEGGER
 
-//	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
 	if(DMA_GetITStatus(DMA2_Stream0, DMA_IT_HTIF0))
 	{
 		DMA_ClearITPendingBit(DMA2_Stream0, DMA_IT_HTIF0);
-//		xTaskNotifyFromISR(xTaskHandle1,0,eNoAction,&xHigherPriorityTaskWoken);
 		printdata(&ADCConvertedValues[0]);
 	}
 	
 	if(DMA_GetITStatus(DMA2_Stream0, DMA_IT_TCIF0))
 	{
 		DMA_ClearITPendingBit(DMA2_Stream0, DMA_IT_TCIF0);
-
-//		xTaskNotifyFromISR(xTaskHandle1,0,eNoAction,&xHigherPriorityTaskWoken);
 		printdata(&ADCConvertedValues[BUFFERSIZE/2]);
 	}
-
-//	if(xHigherPriorityTaskWoken)
-//	{
-//		taskYIELD();
-//	}
 
 	traceISR_EXIT();
 }
