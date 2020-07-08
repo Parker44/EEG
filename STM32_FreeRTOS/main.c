@@ -41,10 +41,6 @@ static void Enable_Peripherals(void);
 void buttonHandler(void);
 void printdata(volatile uint16_t *data);
 
-//Task function prototypes
-//void vTask1_UART_Write(int start, int end);
-//TaskHandle_t xTaskHandle1=NULL;
-
 __IO uint16_t ADCConvertedValues[BUFFERSIZE];
 
 char usr_msg[250]={0};
@@ -70,8 +66,6 @@ int main(void)
 
 	SEGGER_SYSVIEW_Conf();
 	SEGGER_SYSVIEW_Start();
-
-	//xTaskCreate(vTask1_UART_Write, "TASK-1", 500, NULL, 2, &xTaskHandle1 );
 
 	vTaskStartScheduler();
 
