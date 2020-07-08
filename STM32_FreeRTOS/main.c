@@ -78,7 +78,7 @@ void buttonHandler(void)
 	{
 		button_status_flag = PRESSED;
 		Enable_Peripherals();
-	    ADC_SoftwareStartConv(ADC1);
+	    	ADC_SoftwareStartConv(ADC1);
 	}
 }
 
