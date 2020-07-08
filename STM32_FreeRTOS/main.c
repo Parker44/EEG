@@ -29,10 +29,10 @@ extern void initialise_monitor_handles();
 
 //Function prototypes
 static void prvSetupHardware(void);
-static void UART_Config(void);
+static void UART_Configuration(void);
 static void RCC_Configuration(void);
 static void GPIO_Configuration(void);
-static void EXTI_Config(void);
+static void EXTI_Configuration(void);
 static void NVIC_Configuration(void);
 static void TIM2_Configuration(void);
 static void DMA_Configuration(void);
@@ -143,7 +143,7 @@ static void GPIO_Configuration(void)
 	GPIO_PinAFConfig(GPIOA,GPIO_PinSource3,GPIO_AF_USART2); //PA3
 }
 
-static void EXTI_Config(void)
+static void EXTI_Configuration(void)
 {
 	//Interrupt configuration for the button (PC13)
 	//System configuration for EXTI line
@@ -171,7 +171,7 @@ static void NVIC_Configuration(void)
 	NVIC_Init(&NVIC_InitStructure);
 }
 
-static void UART_Config(void)
+static void UART_Configuration(void)
 {
 	USART_InitTypeDef UART2_InitStructure;
 
@@ -260,8 +260,8 @@ static void prvSetupHardware(void)
 {
 	RCC_Configuration();
 	GPIO_Configuration();
-	UART_Config();
-	EXTI_Config();
+	UART_Configuration();
+	EXTI_Configuration();
 	NVIC_Configuration();
 	TIM2_Configuration();
 	DMA_Configuration();
