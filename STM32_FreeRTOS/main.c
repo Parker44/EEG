@@ -54,6 +54,7 @@ int main(void)
 	printf("Semi-hosting is enabled\n");
 #endif
 
+	// Timestamp events to view in SEGGER
 	DWT->CTRL |= (1 << 0);
 
 	//Reset the RCC clock configuration to the default reset state.
@@ -62,6 +63,7 @@ int main(void)
 
 	SystemCoreClockUpdate();
 
+	// Setup peripherals
 	prvSetupHardware();
 
 	SEGGER_SYSVIEW_Conf();
@@ -72,6 +74,7 @@ int main(void)
 	for(;;);
 }
 
+/* Enable peripherals and begin sampling ADC once button is pressed */
 void buttonHandler(void)
 {
 	if(!button_status_flag)
@@ -262,6 +265,11 @@ static void prvSetupHardware(void)
 	ADC_Configuration();
 }
 
+/* 
+   Send half of the ADC buffer each call to allow other half to simultaneously be filled.
+   UART only sends 1-byte at a time but the ADC has 12-bit resolution. 
+   The high 8-bits are sent first then the low 8-bits are sent.
+*/
 void printdata(volatile uint16_t *data)
 {
 	for(uint16_t i=0; i < BUFFERSIZE/2; i++)
@@ -276,7 +284,11 @@ void printdata(volatile uint16_t *data)
 
 }
 
-void DMA2_Stream0_IRQHandler(void) // Called at 1 KHz for 200 KHz sample rate, LED Toggles at 500 Hz
+/* 
+  Send first half of ADC buffer via UART once half filled.
+  Send last half of ADCbuffer via UART once completely filled.
+*/
+void DMA2_Stream0_IRQHandler(void)
 {
 	traceISR_ENTER(); // for SEGGER
 
@@ -295,6 +307,7 @@ void DMA2_Stream0_IRQHandler(void) // Called at 1 KHz for 200 KHz sample rate, L
 	traceISR_EXIT();
 }
 
+/* ISR for button interrupt */
 void EXTI15_10_IRQHandler(void)
 {
 	traceISR_ENTER(); // for SEGGER
