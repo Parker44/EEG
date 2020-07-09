@@ -10,7 +10,6 @@ plot_thread = None
 cond = False
 
 
-# ------Plot data--------
 def plot_data():
     global cond, data
     if cond:
