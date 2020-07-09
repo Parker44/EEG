@@ -267,7 +267,7 @@ static void prvSetupHardware(void)
 
 /* 
    Send half of the ADC buffer each call to allow other half to simultaneously be filled.
-   Argument passed is a pointer to either the first element or the middle element.
+   The argument passed in will point to either the first element or the middle element of the ADC buffer.
    UART only sends 1-byte at a time but the ADC has 12-bit resolution. 
    The high 8-bits are sent first then the low 8-bits are sent.
 */
