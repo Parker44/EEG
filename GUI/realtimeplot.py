@@ -14,7 +14,7 @@ def plot_data():
     global cond, data
     if cond:
         data_bytes = s.read(2)
-        data_int = int.from_bytes(data_bytes, "big") * (5/65535)
+        data_int = int.from_bytes(data_bytes, "big") * (5/4095) # 5V / (2^12 - 1) 12-bit ADC value
 
         if len(data) < 100:
             data = np.append(data, data_int)
