@@ -16,7 +16,6 @@
 
 #include <FHT.h> // include the library
 const int ledPin = 11;
-const byte adcPin = 0;  // A0
 volatile int sampleCount = 0;  // current number of samples in buffer
 
 
